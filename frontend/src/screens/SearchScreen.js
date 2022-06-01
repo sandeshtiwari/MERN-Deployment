@@ -120,7 +120,7 @@ export default function SearchScreen() {
       }
     };
     fetchCategories();
-  }, [dispatch]);
+  }, [dispatch, axiosInstance]);
 
   const getFilterUrl = (filter) => {
     const filterPage = filter.page || page;

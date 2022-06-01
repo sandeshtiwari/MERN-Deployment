@@ -63,7 +63,7 @@ const UserListScreen = () => {
     } else {
       fetchData();
     }
-  }, [userInfo, successDelete]);
+  }, [userInfo, successDelete, axiosInstance]);
 
   const deleteHandler = async (user) => {
     if (window.confirm("Are you sure to delete?")) {

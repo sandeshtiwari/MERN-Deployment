@@ -53,7 +53,7 @@ const DashboardScreen = () => {
       }
     };
     fetchData();
-  }, [userInfo]);
+  }, [userInfo, axiosInstance]);
 
   return (
     <div>

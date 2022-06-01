@@ -65,7 +65,7 @@ const OrderListScreen = () => {
     } else {
       fetchData();
     }
-  }, [userInfo, successDelete]);
+  }, [userInfo, successDelete, axiosInstance]);
 
   const deleteHandler = async (order) => {
     if (window.confirm("Are you sure to delete?")) {

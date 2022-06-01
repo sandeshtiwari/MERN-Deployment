@@ -46,7 +46,7 @@ const HomeScreen = () => {
       // setProducts(result.data);
     };
     fetchData();
-  }, []);
+  }, [axiosInstance]);
   return (
     <div>
       <Helmet>

@@ -65,7 +65,7 @@ const UserEditScreen = () => {
       }
     };
     fetchData();
-  }, [userId, userInfo]);
+  }, [userId, userInfo, axiosInstance]);
 
   const submitHandler = async (e) => {
     e.preventDefault();

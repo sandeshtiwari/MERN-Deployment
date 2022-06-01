@@ -165,6 +165,7 @@ const OrderScreen = () => {
     paypalDispatch,
     successPay,
     successDeliver,
+    axiosInstance,
   ]);
 
   const deliverOrderHandler = async () => {

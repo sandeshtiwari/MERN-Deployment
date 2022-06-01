@@ -89,7 +89,7 @@ const ProductEditScreen = () => {
       }
     };
     fetchData();
-  }, [productId]);
+  }, [productId, axiosInstance]);
 
   const submitHandler = async (e) => {
     e.preventDefault();

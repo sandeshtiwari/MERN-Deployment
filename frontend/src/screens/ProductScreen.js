@@ -81,7 +81,7 @@ const ProductScreen = () => {
       }
     };
     fetchData();
-  }, [slug]);
+  }, [slug, axiosInstance]);
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;

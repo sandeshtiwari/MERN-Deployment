@@ -92,7 +92,7 @@ const ProductListScreen = () => {
     } else {
       fetchData();
     }
-  }, [page, userInfo, successDelete]);
+  }, [page, userInfo, successDelete, axiosInstance]);
 
   const createHandler = async () => {
     if (window.confirm("Are you sure to create?")) {

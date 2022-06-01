@@ -49,7 +49,7 @@ const OrderHistoryScreen = () => {
       }
     };
     fetchdata();
-  }, [userInfo]);
+  }, [userInfo, axiosInstance]);
 
   return (
     <div>

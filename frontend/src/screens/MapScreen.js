@@ -59,7 +59,7 @@ export default function MapScreen() {
     ctxDispatch({
       type: "SET_FULLBOX_ON",
     });
-  }, [ctxDispatch]);
+  }, [ctxDispatch, axiosInstance]);
 
   const onLoad = (map) => {
     mapRef.current = map;
