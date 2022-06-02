@@ -3,7 +3,6 @@ import { createContext, useReducer } from "react";
 export const Store = createContext();
 
 const initialState = {
-  fullBox: false,
   userInfo: localStorage.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
     : null,
@@ -13,7 +12,7 @@ const initialState = {
       : [],
     shippingAddress: localStorage.getItem("shippingAddress")
       ? JSON.parse(localStorage.getItem("shippingAddress"))
-      : { location: {} },
+      : {},
     paymentMethod: localStorage.getItem("paymentMethod")
       ? localStorage.getItem("paymentMethod")
       : "",
@@ -22,10 +21,6 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "SET_FULLBOX_ON":
-      return { ...state, fullBox: true };
-    case "SET_FULLBOX_OFF":
-      return { ...state, fullBox: false };
     case "CART_ADD_ITEM": {
       // add to cart
       const newItem = action.payload;
@@ -65,17 +60,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         cart: { ...state.cart, shippingAddress: action.payload },
-      };
-    case "SAVE_SHIPPING_ADDRESS_MAP_LOCATION":
-      return {
-        ...state,
-        cart: {
-          ...state.cart,
-          shippingAddress: {
-            ...state.cart.shippingAddress,
-            location: action.payload,
-          },
-        },
       };
     case "SAVE_PAYMENT_METHOD":
       return {

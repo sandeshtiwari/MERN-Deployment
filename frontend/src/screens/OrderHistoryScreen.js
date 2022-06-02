@@ -23,10 +23,6 @@ const reducer = (state, action) => {
 };
 
 const OrderHistoryScreen = () => {
-  const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  });
-
   const { state } = useContext(Store);
   const { userInfo } = state;
   const navigate = useNavigate();
@@ -40,7 +36,7 @@ const OrderHistoryScreen = () => {
     const fetchdata = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axiosInstance.get(`/api/orders/mine`, {
+        const { data } = await axios.get(`/api/orders/mine`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -49,7 +45,7 @@ const OrderHistoryScreen = () => {
       }
     };
     fetchdata();
-  }, [userInfo, axiosInstance]);
+  }, [userInfo]);
 
   return (
     <div>

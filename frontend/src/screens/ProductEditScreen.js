@@ -4,7 +4,6 @@ import { getError } from "../utils";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
-import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
@@ -42,10 +41,6 @@ const reducer = (state, action) => {
 };
 
 const ProductEditScreen = () => {
-  const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  });
-
   const navigate = useNavigate();
   const params = useParams();
   const { id: productId } = params;
@@ -63,7 +58,6 @@ const ProductEditScreen = () => {
   const [slug, setSlug] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
-  const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [brand, setBrand] = useState("");
@@ -73,12 +67,11 @@ const ProductEditScreen = () => {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axiosInstance.get(`/api/products/${productId}`);
+        const { data } = await axios.get(`/api/products/${productId}`);
         setName(data.name);
         setSlug(data.slug);
         setPrice(data.price);
         setImage(data.image);
-        setImages(data.images);
         setCategory(data.category);
         setCountInStock(data.countInStock);
         setBrand(data.brand);
@@ -89,13 +82,13 @@ const ProductEditScreen = () => {
       }
     };
     fetchData();
-  }, [productId, axiosInstance]);
+  }, [productId]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
       dispatch({ type: "UPDATE_REQUEST" });
-      await axiosInstance.put(
+      await axios.put(
         `/api/products/${productId}`,
         {
           _id: productId,
@@ -103,7 +96,6 @@ const ProductEditScreen = () => {
           slug,
           price,
           image,
-          images,
           category,
           brand,
           countInStock,
@@ -122,35 +114,27 @@ const ProductEditScreen = () => {
     }
   };
 
-  const uploadFileHandler = async (e, forImages) => {
+  const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append("file", file);
     try {
       dispatch({ type: "UPLOAD_REQUEST" });
-      const { data } = await axiosInstance.post("/api/upload", bodyFormData, {
+      const { data } = await axios.post("/api/upload", bodyFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
           authorization: `Bearer ${userInfo.token}`,
         },
       });
       dispatch({ type: "UPLOAD_SUCCESS" });
-
-      if (forImages) {
-        setImages([...images, data.secure_url]);
-      } else {
-        setImage(data.secure_url);
-      }
-      toast.success("Image uploaded successfully. Click update to apply it.");
+      toast.success("Image uploaded successfully!");
+      setImage(data.secure_url);
     } catch (err) {
       toast.error(getError(error));
       dispatch({ type: "UPLOAD_FAIL", payload: getError(err) });
     }
   };
-  const deleteFileHandler = async (fileName) => {
-    setImage(images.filter((x) => x !== fileName));
-    toast.success("Image removed successfully. Click update to apply it.");
-  };
+
   return (
     <Container className='small-container'>
       <Helmet>
@@ -197,34 +181,10 @@ const ProductEditScreen = () => {
             ></Form.Control>
           </Form.Group>
           <Form.Group className='mb-3' controlId='imageFile'>
-            <Form.Label>Upload Image</Form.Label>
+            <Form.Label>Upload File</Form.Label>
             <Form.Control type='file' onChange={uploadFileHandler} />
             {loadingUpload && <LoadingBox></LoadingBox>}
           </Form.Group>
-
-          <Form.Group className='mb-3' controlId='additionalImage'>
-            <Form.Label>Additional Images</Form.Label>
-            {images.length === 0 && <MessageBox>No image</MessageBox>}
-            <ListGroup variant='flush'>
-              {images.map((x) => (
-                <ListGroup.Item key={x}>
-                  {x}
-                  <Button variant='light' onClick={() => deleteFileHandler(x)}>
-                    <i className='fa fa-times-circle'></i>
-                  </Button>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Form.Group>
-          <Form.Group className='mb-3' controlId='additionalImageFile'>
-            <Form.Label>Upload Additional Image</Form.Label>
-            <Form.Control
-              type='file'
-              onChange={(e) => uploadFileHandler(e, true)}
-            />
-            {loadingUpload && <LoadingBox></LoadingBox>}
-          </Form.Group>
-
           <Form.Group className='mb-3' controlId='category'>
             <Form.Label>Category</Form.Label>
             <Form.Control

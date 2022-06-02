@@ -45,10 +45,6 @@ const reducer = (state, aciton) => {
 };
 
 const ProductListScreen = () => {
-  const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  });
-
   const navigate = useNavigate();
   const [
     {
@@ -76,12 +72,9 @@ const ProductListScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axiosInstance.get(
-          `/api/products/admin?page=${page}`,
-          {
-            headers: { authorization: `Bearer ${userInfo.token}` },
-          }
-        );
+        const { data } = await axios.get(`/api/products/admin?page=${page}`, {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        });
 
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {}
@@ -92,13 +85,13 @@ const ProductListScreen = () => {
     } else {
       fetchData();
     }
-  }, [page, userInfo, successDelete, axiosInstance]);
+  }, [page, userInfo, successDelete]);
 
   const createHandler = async () => {
     if (window.confirm("Are you sure to create?")) {
       try {
         dispatch({ type: "CREATE_REQUEST" });
-        const { data } = await axiosInstance.post(
+        const { data } = await axios.post(
           "/api/products",
           {},
           {
@@ -121,7 +114,7 @@ const ProductListScreen = () => {
     if (window.confirm("Are you sure to delete?")) {
       try {
         dispatch({ type: "DELETE_REQUEST" });
-        await axiosInstance.delete(`/api/products/${product._id}`, {
+        await axios.delete(`/api/products/${product._id}`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         toast.success("Product deleted successfully!");

@@ -10,10 +10,6 @@ import { toast } from "react-toastify";
 import { getError } from "../utils";
 
 const SignupScreen = () => {
-  const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  });
-
   const navigate = useNavigate();
   // Redirection login.. need to understand
   const { search } = useLocation();
@@ -35,7 +31,7 @@ const SignupScreen = () => {
       return;
     }
     try {
-      const { data } = await axiosInstance.post("/api/users/signup", {
+      const { data } = await axios.post("/api/users/signup", {
         name,
         email,
         password,

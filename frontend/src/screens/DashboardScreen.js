@@ -28,10 +28,6 @@ const reducer = (state, action) => {
 };
 
 const DashboardScreen = () => {
-  const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  });
-
   const [{ loading, summary, error }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
@@ -43,7 +39,7 @@ const DashboardScreen = () => {
     const fetchData = async () => {
       try {
         // console.log("HERE");
-        const { data } = await axiosInstance.get("/api/orders/summary", {
+        const { data } = await axios.get("/api/orders/summary", {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         // console.log("DAT HERE " + data.users[0]);
@@ -53,7 +49,7 @@ const DashboardScreen = () => {
       }
     };
     fetchData();
-  }, [userInfo, axiosInstance]);
+  }, [userInfo]);
 
   return (
     <div>
@@ -61,7 +57,7 @@ const DashboardScreen = () => {
       {loading ? (
         <LoadingBox />
       ) : error ? (
-        <MessageBox variant='danger'>{error}</MessageBox>
+        <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <>
           <Row>
@@ -103,15 +99,15 @@ const DashboardScreen = () => {
               </Card>
             </Col>
           </Row>
-          <div className='my-3'>
+          <div className="my-3">
             <h2>Sales</h2>
             {summary.dailyOrders.length === 0 ? (
               <MessageBox>No sale</MessageBox>
             ) : (
               <Chart
-                width='100%'
-                height='400px'
-                chartType='AreaChart'
+                width="100%"
+                height="400px"
+                chartType="AreaChart"
                 loading={<div>Loading chart...</div>}
                 data={[
                   ["Date", "Sales"],
@@ -120,15 +116,15 @@ const DashboardScreen = () => {
               ></Chart>
             )}
           </div>
-          <div className='my-3'>
+          <div className="my-3">
             <h2>Categories</h2>
             {summary.productCategories.length === 0 ? (
               <MessageBox>No Category</MessageBox>
             ) : (
               <Chart
-                width='100%'
-                height='400px'
-                chartType='PieChart'
+                width="100%"
+                height="400px"
+                chartType="PieChart"
                 loading={<div>Loading chart...</div>}
                 data={[
                   ["Category", "SalProductses"],

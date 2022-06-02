@@ -27,10 +27,6 @@ const reducer = (state, action) => {
 };
 
 const PlaceOrderScreen = () => {
-  const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  });
-
   const navigate = useNavigate();
 
   const [{ loading }, dispatch] = useReducer(reducer, {
@@ -59,7 +55,7 @@ const PlaceOrderScreen = () => {
   const placeOrderHandler = async () => {
     try {
       dispatch({ type: "CREATE_REQUEST" });
-      const { data } = await axiosInstance.post(
+      const { data } = await axios.post(
         "/api/orders",
         {
           orderItems: cart.cartItems,

@@ -23,10 +23,6 @@ const reducer = (state, action) => {
 };
 
 const HomeScreen = () => {
-  const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  });
-
   const [{ loading, error, products }, dispatch] = useReducer(logger(reducer), {
     products: [],
     loading: true,
@@ -37,7 +33,7 @@ const HomeScreen = () => {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axiosInstance.get("/api/products");
+        const result = await axios.get("/api/products");
         dispatch({ type: "FETCH_SUCCESS", payload: result.data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
@@ -46,7 +42,7 @@ const HomeScreen = () => {
       // setProducts(result.data);
     };
     fetchData();
-  }, [axiosInstance]);
+  }, []);
   return (
     <div>
       <Helmet>

@@ -30,14 +30,10 @@ import DashboardScreen from "./screens/DashboardScreen";
 import AdminRoute from "./components/ProtectedRoute copy";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
-import OrderListScreen from "./screens/OrderListScreen";
-import UserListScreen from "./screens/UserListScreen";
-import UserEditScreen from "./screens/UserEditScreen";
-import MapScreen from "./screens/MapScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { fullBox, cart, userInfo } = state;
+  const { cart, userInfo } = state;
 
   const signoutHandler = () => {
     ctxDispatch({ type: "USER_SIGNOUT" });
@@ -67,74 +63,70 @@ function App() {
       <div
         className={
           sidebarIsOpen
-            ? fullBox
-              ? "site-container active-cont d-flex flex-column full-box"
-              : "site-container active-cont d-flex flex-column"
-            : fullBox
-            ? "site-container d-flex flex-column full-box"
-            : "site-container d-flex flex-column"
+            ? "d-flex flex-column site-container active-cont"
+            : "d-flex flex-column site-container"
         }
       >
-        <ToastContainer position='bottom-center' limit={1} />
+        <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <Navbar bg='dark' variant='dark' expand='lg'>
+          <Navbar bg="dark" variant="dark" expand="lg">
             <Container>
               <Button
-                variant='dark'
+                variant="dark"
                 onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
               >
-                <i className='fas fa-bars'></i>
+                <i className="fas fa-bars"></i>
               </Button>
-              <LinkContainer to='/'>
+              <LinkContainer to="/">
                 <Navbar.Brand>amazona</Navbar.Brand>
               </LinkContainer>
-              <Navbar.Toggle aria-controls='basic-navbar-nav' />
-              <Navbar.Collapse id='basic-navbar-nav'>
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse id="basic-navbar-nav">
                 <SearchBox />
-                <Nav className='me-auto w-100 justify-content-end'>
-                  <Link to='/cart' className='nav-link'>
+                <Nav className="me-auto w-100 justify-content-end">
+                  <Link to="/cart" className="nav-link">
                     Cart
                     {cart.cartItems.length > 0 && (
-                      <Badge pill bg='danger'>
+                      <Badge pill bg="danger">
                         {/* WHAT IS THIS?? reduce is a in-built javascript function. a is the accumulator (starting at 0 and is the value returned by the last reduce call, i.e. accumulator) and c is the element from the array  */}
                         {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                       </Badge>
                     )}
                   </Link>
                   {userInfo ? (
-                    <NavDropdown title={userInfo.name} id='basic-nav-dropdown'>
-                      <LinkContainer to='/profile'>
+                    <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
+                      <LinkContainer to="/profile">
                         <NavDropdown.Item>User Profile</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to='/orderhistory'>
+                      <LinkContainer to="/orderhistory">
                         <NavDropdown.Item>Order History</NavDropdown.Item>
                       </LinkContainer>
                       <NavDropdown.Divider />
                       <Link
-                        className='dropdown-item'
-                        to='#signout'
+                        className="dropdown-item"
+                        to="#signout"
                         onClick={signoutHandler}
                       >
                         Sign Out
                       </Link>
                     </NavDropdown>
                   ) : (
-                    <Link className='nav-link' to='/signin'>
+                    <Link className="nav-link" to="/signin">
                       Sign In
                     </Link>
                   )}
                   {userInfo && userInfo.isAdmin && (
-                    <NavDropdown title='Admin' id='admin-nav-dropdown'>
-                      <LinkContainer to='/admin/dashboard'>
+                    <NavDropdown title="Admin" id="admin-nav-dropdown">
+                      <LinkContainer to="/admin/dashboard">
                         <NavDropdown.Item>Dashboard</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to='/admin/products'>
+                      <LinkContainer to="/admin/products">
                         <NavDropdown.Item>Products</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to='/admin/orders'>
+                      <LinkContainer to="/admin/orderlist">
                         <NavDropdown.Item>Orders</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to='/admin/users'>
+                      <LinkContainer to="/admin/userlist">
                         <NavDropdown.Item>Users</NavDropdown.Item>
                       </LinkContainer>
                     </NavDropdown>
@@ -151,7 +143,7 @@ function App() {
               : "side-navbar d-flex justify-content-between felx-wrap flex-column"
           }
         >
-          <Nav className='flex-column text-white w-100 p-2'>
+          <Nav className="flex-column text-white w-100 p-2">
             <Nav.Item>
               <strong>Categories</strong>
             </Nav.Item>
@@ -168,34 +160,26 @@ function App() {
           </Nav>
         </div>
         <main>
-          <Container className='mt-3'>
+          <Container className="mt-3">
             <Routes>
-              <Route path='/product/:slug' element={<ProductScreen />} />
-              <Route path='/cart' element={<CartScreen />} />
-              <Route path='/search' element={<SearchScreen />} />
-              <Route path='/signin' element={<SigninScreen />} />
-              <Route path='/signup' element={<SignupScreen />} />
+              <Route path="/product/:slug" element={<ProductScreen />} />
+              <Route path="/cart" element={<CartScreen />} />
+              <Route path="/search" element={<SearchScreen />} />
+              <Route path="/signin" element={<SigninScreen />} />
+              <Route path="/signup" element={<SignupScreen />} />
               <Route
-                path='/profile'
+                path="/profile"
                 element={
                   <ProtectedRoute>
                     <ProfileScreen />
                   </ProtectedRoute>
                 }
               />
+              <Route path="/shipping" element={<ShippingAddressScreen />} />
+              <Route path="/payment" element={<PaymentMethodScreen />} />
+              <Route path="/placeorder" element={<PlaceOrderScreen />} />
               <Route
-                path='/map'
-                element={
-                  <ProtectedRoute>
-                    <MapScreen />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path='/shipping' element={<ShippingAddressScreen />} />
-              <Route path='/payment' element={<PaymentMethodScreen />} />
-              <Route path='/placeorder' element={<PlaceOrderScreen />} />
-              <Route
-                path='/order/:id'
+                path="/order/:id"
                 element={
                   <ProtectedRoute>
                     <OrderScreen />
@@ -203,7 +187,7 @@ function App() {
                 }
               />
               <Route
-                path='/orderhistory'
+                path="/orderhistory"
                 element={
                   <ProtectedRoute>
                     <OrderHistoryScreen />
@@ -212,7 +196,7 @@ function App() {
               />
               {/* Admin Routes */}
               <Route
-                path='/admin/dashboard'
+                path="/admin/dashboard"
                 element={
                   <AdminRoute>
                     <DashboardScreen />
@@ -220,7 +204,7 @@ function App() {
                 }
               />
               <Route
-                path='/admin/products'
+                path="/admin/products"
                 element={
                   <AdminRoute>
                     <ProductListScreen />
@@ -228,43 +212,19 @@ function App() {
                 }
               />
               <Route
-                path='/admin/product/:id'
+                path="/admin/product/:id"
                 element={
                   <AdminRoute>
                     <ProductEditScreen />
                   </AdminRoute>
                 }
               />
-              <Route
-                path='/admin/user/:id'
-                element={
-                  <AdminRoute>
-                    <UserEditScreen />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path='/admin/orders'
-                element={
-                  <AdminRoute>
-                    <OrderListScreen />
-                  </AdminRoute>
-                }
-              />
-              <Route
-                path='/admin/users'
-                element={
-                  <AdminRoute>
-                    <UserListScreen />
-                  </AdminRoute>
-                }
-              />
-              <Route path='/' element={<HomeScreen />} />
+              <Route path="/" element={<HomeScreen />} />
             </Routes>
           </Container>
         </main>
         <footer>
-          <div className='text-center'>All rights reserved</div>
+          <div className="text-center">All rights reserved</div>
         </footer>
       </div>
     </BrowserRouter>

@@ -10,10 +10,6 @@ import { toast } from "react-toastify";
 import { getError } from "../utils";
 
 const SingninScreen = () => {
-  const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  });
-
   const navigate = useNavigate();
   // Redirection login.. need to understand
   const { search } = useLocation();
@@ -29,7 +25,7 @@ const SingninScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axiosInstance.post("/api/users/signin", {
+      const { data } = await axios.post("/api/users/signin", {
         email,
         password,
       });
